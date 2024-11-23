@@ -91,29 +91,29 @@ class InvoiceGeneratorTest {
         assertEquals(expected, actual);
     }
 
-//    @Test
-//    void generateHtmlStatementSuccess() throws IOException {
-//        //Given
-//        var invoice = readInvoices("invoices.json").get(0);
-//        var plays = readPlays("plays.json");
-//
-//        //When
-//        String actual = generator.htmlStatement(invoice, plays);
-//
-//        //Then
-//        String expected = """
-//                <h1>Statement for BigCo</h1>
-//                <table>
-//                <tr><th>play</th><th>seats</th><th>cost</th></tr>
-//                <tr><td>Hamlet</td><td>$650.00</td><td>55</td></tr>
-//                <tr><td>As You Like It</td><td>$580.00</td><td>35</td></tr>
-//                <tr><td>Othello</td><td>$500.00</td><td>40</td></tr>
-//                </table>
-//                <p>Amount owed is <em>$1,730.00</em></p>
-//                <p>You earned <em>47</em> credits</p>
-//                """;
-//        Assertions.assertEquals(expected, actual);
-//    }
+    @Test
+    void generateHtmlStatementSuccess() throws IOException {
+        //Given
+        var invoice = readInvoices("invoices.json").get(0);
+        var plays = readPlays("plays.json");
+
+        //When
+        String actual = generator.htmlStatement(invoice, plays);
+
+        //Then
+        String expected = """
+                <h1>Statement for BigCo</h1>
+                <table>
+                <tr><th>play</th><th>seats</th><th>cost</th></tr>
+                <tr><td>Hamlet</td><td>$650.00</td><td>55</td></tr>
+                <tr><td>As You Like It</td><td>$580.00</td><td>35</td></tr>
+                <tr><td>Othello</td><td>$500.00</td><td>40</td></tr>
+                </table>
+                <p>Amount owed is <em>$1,730.00</em></p>
+                <p>You earned <em>47</em> credits</p>
+                """;
+        assertEquals(expected, actual);
+    }
 
 
 }

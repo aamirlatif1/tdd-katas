@@ -1,8 +1,6 @@
 package com.ss.invoice;
 
-import com.ss.invoice.models.Invoice;
-import com.ss.invoice.models.Performance;
-import com.ss.invoice.models.Play;
+import com.ss.invoice.models.*;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -26,43 +24,39 @@ import static java.lang.String.format;
  * <pre/>
  */
 public class InvoiceGenerator {
+
     public String statement(final Invoice invoice, final Map<String, Play> plays) {
-        var totalAmount = 0.0;
-        var volumeCredits = 0;
-        var result = format("Statement for %s%n", invoice.customer());
-        final var currency = NumberFormat.getCurrencyInstance(Locale.US);
-        for (Performance perf : invoice.performances()) {
-            if (!plays.containsKey(perf.playID()))
-                throw new IllegalArgumentException("performance with unknown play id: " + perf.playID());
-            final var play = plays.get(perf.playID());
-            double thisAmount;
-            switch (play.type()) {
-                case "tragedy" -> {
-                    thisAmount = 40000.0;
-                    if (perf.audience() > 30) {
-                        thisAmount += 1000 * (perf.audience() - 30);
-                    }
-                }
-                case "comedy" -> {
-                    thisAmount = 30000.0;
-                    if (perf.audience() > 20) {
-                        thisAmount += 10000 + 500 * (perf.audience() - 20);
-                    }
-                    thisAmount += 300 * perf.audience();
-                }
-                default -> throw new IllegalArgumentException("unknown play type: " + play.type());
-            }
-            // add volume credits
-            volumeCredits += Math.max(perf.audience() - 30, 0);
-            // add extra credit for every ten comedy attendees
-            if ("comedy".equals(play.type()))
-                volumeCredits += perf.audience() / 5;
-            // print line for this order
-            result += format("  %s: %s (%d seats)%n", play.name(), currency.format(thisAmount / 100.0), perf.audience());
-            totalAmount += thisAmount;
-        }
-        result += format("Amount owed is %s%n", currency.format(totalAmount / 100.0));
-        result += format("You earned %d credits%n", volumeCredits);
-        return result;
+        return renderPlainText(new ReportDataGenerator().generate(invoice, plays));
     }
+
+    public String htmlStatement(Invoice invoice, Map<String, Play> plays) {
+        return renderHTML(new ReportDataGenerator().generate(invoice, plays));
+    }
+
+    private String renderPlainText(StatementData data) {
+        var result = new StringBuilder(format("Statement for %s%n", data.customer()));
+        for (PerformanceExt perf : data.performances()) {
+            result.append(format("  %s: %s (%d seats)%n", perf.play().name(), usd(perf.amount()), perf.audience()));
+        }
+        result.append(format("Amount owed is %s%n", usd(data.totalAmount())));
+        result.append(format("You earned %d credits%n", data.totalVolumeCredits()));
+        return result.toString();
+    }
+
+    private String renderHTML(StatementData data) {
+        var result = new StringBuilder(format("<h1>Statement for %s</h1>%n", data.customer()));
+        result.append("<table>\n<tr><th>play</th><th>seats</th><th>cost</th></tr>\n");
+        for (PerformanceExt perf : data.performances()) {
+            result.append(format("<tr><td>%s</td><td>%s</td><td>%d</td></tr>%n", perf.play().name(), usd(perf.amount()), perf.audience()));
+        }
+        result.append("</table>\n");
+        result.append(format("<p>Amount owed is <em>%s</em></p>%n", usd(data.totalAmount())));
+        result.append(format("<p>You earned <em>%d</em> credits</p>%n", data.totalVolumeCredits()));
+        return result.toString();
+    }
+
+    private String usd(double totalAmount) {
+        return NumberFormat.getCurrencyInstance(Locale.US).format(totalAmount / 100.0);
+    }
+
 }
