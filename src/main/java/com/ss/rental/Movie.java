@@ -5,24 +5,36 @@ public class Movie {
     public static final int CHILDRENS = 2;
     public static final int REGULAR = 0;
     public static final int NEW_RELEASE = 1;
+    private Price price;
 
     private String _title;
-    private int _priceCode;
 
     public Movie(String title, int priceCode) {
         _title = title;
-        _priceCode = priceCode;
+        setPriceCode(priceCode);
     }
 
-    public int getPriceCode() {
-        return _priceCode;
-    }
-
-    public void setPriceCode(int arg) {
-        _priceCode = arg;
-    }
 
     public String getTitle() {
         return _title;
     }
+
+    double getCharge(int daysRented) {
+        return price.getCharge(daysRented);
+    }
+    public void setPriceCode(int arg) {
+        switch (arg) {
+            case REGULAR -> price = new RegularPrice();
+            case CHILDRENS -> price = new ChildrenPrice();
+            case NEW_RELEASE -> price = new NewReleasePrice();
+            default -> throw new IllegalArgumentException("Incorrect Price Code");
+        }
+    }
+
+    public Price price() {
+        return price;
+    }
+
+
+
 }
