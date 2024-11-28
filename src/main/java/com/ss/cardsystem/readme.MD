@@ -1,4 +1,15 @@
 # The Oyster Card System
+
+- [x] Mercury
+- [x] Venus
+- [x] Earth (Orbit/Moon)
+- [x] Mars
+- [ ] Jupiter
+- [ ] Saturn
+- [ ] Uranus
+- [ ] Neptune
+- [ ] Comet Haley
+
 You are required to model the following fare card system which is a limited version of
 London’s Oyster card system. At the end of the test, you should be able to demonstrate a
 user loading a card with £30, and taking the following trips, and then viewing the balance.
