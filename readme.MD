@@ -1,2 +1,16 @@
 # TDD Katas
 
+1. [Bank Account](src/main/java/com/ss/account) - [test file](src/test/java/com/ss/account/BankAccountTest.java)
+2. [Anagram](src/main/java/com/ss/anagram) - [test file](src/test/java/com/ss/anagram/AnagramTest.java)
+3. [Bank](src/main/java/com/ss/bank) - [test file](src/test/java/com/ss/bank/BankTest.java)
+4. [Bowling](src/main/java/com/ss/bowling) - [test file](src/test/java/com/ss/bowling/BowlingTest.java)
+5. [Bank](src/main/java/com/ss/bank) - [test file](src/test/java/com/ss/bank/BankTest.java)
+6. [Card System](src/main/java/com/ss/cardsystem) - [test file](src/test/java/com/ss/cardsystem/CardSystemTest.java)
+7. [Invoice](src/main/java/com/ss/invoice) - [test file](src/test/java/com/ss/invoice/InvoiceGeneratorTest.java)
+8. [The Jump Game](src/main/java/com/ss/jumpgame) - [test file](src/test/java/com/ss/jumpgame/JumpGameTest.java)
+9. [Load Balancer](src/main/java/com/ss/lb) - [test file](src/test/java/com/ss/lb/LoadBalancerTest.java)
+10. [Prime Factors](src/main/java/com/ss/primefactors) - [test file](src/test/java/com/ss/primefactors/PrimeFactorTest.java)
+11. [Movie Rental](src/main/java/com/ss/vs) - [test file](src/test/java/com/ss/vs/CustomerTest.java)
+12. [Roman Numbers](src/main/java/com/ss/romans) - [test file](src/test/java/com/ss/romans/RomanNumeralsTest.java)
+13. [Text Justification](src/main/java/com/ss/text) - [test file](src/test/java/com/ss/text/TextJustificationTest.java)
+14. [URL Shortener](src/main/java/com/ss/urlshortener) - [test file](src/test/java/com/ss/urlshortener/URLShortenerTest.java)

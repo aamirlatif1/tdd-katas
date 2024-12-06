@@ -1,81 +1,68 @@
 package com.ss.bowling;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Bowling {
-    private List<Integer> rolls;
 
-    public Bowling(String card){
-        rolls = new ArrayList<>();
-        String[] frames = card.split("\\|");
-        for (int i = 0; i < 10; i++) {
-            String frame = frames[i];
-            if(frame.equals("X")) {
-                rolls.add(10);
-            } else if(frame.charAt(1) == '/') {
-                int firstRoll = getSlotValue(frame.charAt(0));
-                rolls.add(firstRoll);
-                rolls.add(10-firstRoll);
-            } else {
-                rolls.add(getSlotValue(frame.charAt(0)));
-                rolls.add(getSlotValue(frame.charAt(1)));
-            }
-        }
-        String lastBonus = card.substring(card.indexOf("||")+2);
-        if(lastBonus.length() > 1) {
-            rolls.add(getSlotValue(lastBonus.charAt(0)));
-            rolls.add(getSlotValue(lastBonus.charAt(1)));
-        } else if(lastBonus.length() == 1) {
-            rolls.add(getSlotValue(lastBonus.charAt(0)));
-            rolls.add(0);
-        } else {
-            rolls.add(0);
-            rolls.add(0);
-        }
+    public static final int LAST_FRAME_BONUS = 11;
 
-    }
-
-    private int getSlotValue(char frameSlot) {
-        if (frameSlot == 'X') return 10;
-        return frameSlot == '-' ? 0 : frameSlot - '0';
-    }
-
-    public int score() {
+    public int score(String game) {
         int score = 0;
-        int frameIndex = 0;
-        for (int frame = 0; frame < 10; frame++) {
-            if (isStrike(frameIndex)) {
-                score += 10 + strikeBonus(frameIndex);
-                frameIndex++;
-            } else if(isSpare(frameIndex)) {
-                score += 10 + spareBonus(frameIndex);
-                frameIndex += 2;
+        String[] frames = game.split("\\|");
+        for (int frameIndex = 0; frameIndex < 10; frameIndex++) {
+            String frame = frames[frameIndex];
+            if (isStrike(frame)) {
+                score += 10 + strikeBonus(frameIndex + 1, frames);
+            } else if (isSpare(frame)) {
+                score += 10 + spareBonus(frameIndex + 1, frames);
             } else {
-                score += frameScore(frameIndex);
-                frameIndex += 2;
+                score += frameScores(frame);
             }
         }
         return score;
     }
 
-    private int frameScore(int slotIndex) {
-        return rolls.get(slotIndex) + rolls.get(slotIndex + 1);
+    private int spareBonus(int bonusFrame, String[] frames) {
+        if (isLastFrame(bonusFrame)) {
+            bonusFrame++;
+        }
+        return rollScore(frames[bonusFrame], 0);
     }
 
-    private Integer spareBonus(int slotIndex) {
-        return rolls.get(slotIndex + 2);
+    private int strikeBonus(int bonusFrame, String[] frames) {
+        if (isLastFrame(bonusFrame)) {
+            return frameScores(frames[LAST_FRAME_BONUS]);
+        } else if (isStrike(frames[bonusFrame])) {
+            if (isLastFrame(bonusFrame + 1)) {
+                bonusFrame++;
+            }
+            return 10 + rollScore(frames[bonusFrame + 1], 0);
+        } else {
+            return frameScores(frames[bonusFrame]);
+        }
     }
 
-    private int strikeBonus(int slotIndex) {
-        return rolls.get(slotIndex + 1) + rolls.get(slotIndex + 2);
+    private static boolean isLastFrame(int frameIndex) {
+        return frameIndex == 10;
     }
 
-    private boolean isSpare(int slotIndex) {
-        return rolls.get(slotIndex) + rolls.get(slotIndex + 1) == 10;
+    private static boolean isSpare(String frame) {
+        return frame.charAt(1) == '/';
     }
 
-    private boolean isStrike(int slotIndex) {
-        return rolls.get(slotIndex) == 10;
+    private int frameScores(String frame) {
+        if (frame.charAt(1) == '/') return 10;
+        return rollScore(frame, 0) + rollScore(frame, 1);
     }
+
+    private static boolean isStrike(String frame) {
+        return frame.charAt(0) == 'X';
+    }
+
+    private int rollScore(String frame, int rollIndex) {
+        if (frame.charAt(rollIndex) == 'X') return 10;
+        if (frame.charAt(rollIndex) != '-') {
+            return frame.charAt(rollIndex) - '0';
+        }
+        return 0;
+    }
+
 }
