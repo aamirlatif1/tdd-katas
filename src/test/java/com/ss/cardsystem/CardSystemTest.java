@@ -27,6 +27,7 @@ public class CardSystemTest {
 
         TransportRegistry.addType("Bus", BUS);
         TransportRegistry.addType("Tube", TUBE);
+
         StationRegistry.addStation("Holborn", 1);
         StationRegistry.addStation("Chelsea");
         StationRegistry.addStation("Earl’s Court", 1, 2);
@@ -44,7 +45,7 @@ public class CardSystemTest {
     @Test
     public void rideBusWithCard_deduct() {
 
-        cardSystem.checkIn(card, "Bus328", "Earl’s Court");
+        cardSystem.checkIn(card, "Bus", "Earl’s Court");
 
         assertThat(card.balance(), is(2680));
     }
@@ -54,7 +55,7 @@ public class CardSystemTest {
         Card card = new Card(1, 100);
 
         Exception exception = assertThrowsExactly(IllegalArgumentException.class,
-                () ->  cardSystem.checkIn(card, "Bus328", "Earl’s Court"));
+                () ->  cardSystem.checkIn(card, "Bus", "Earl’s Court"));
 
         assertThat(exception.getMessage(), is("insufficient balance"));
     }
